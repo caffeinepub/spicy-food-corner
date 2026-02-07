@@ -1,0 +1,91 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Admin Panel token-based authentication fixes (frontend)",
+  "requirements": [
+    {
+      "id": "REQ-11",
+      "summary": "Fix /admin/login credential handling and ensure correct credentials navigate to the dashboard with clear errors otherwise.",
+      "acceptanceCriteria": [
+        "On /admin/login, submitting username exactly \"foodram corner\" and password exactly \"ram4792sa\" navigates to /admin/dashboard.",
+        "Submitting incorrect credentials shows a clear error message and does not navigate.",
+        "Username/password input handling does not accidentally fail due to leading/trailing whitespace (e.g., trimming is applied consistently or the UI clearly communicates the exact matching rules)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/AdminLoginPage.tsx",
+          "operation": "modify",
+          "description": "Update the login submit flow to authenticate via the backend-issued admin session token (via updated useAdminLogin), apply consistent whitespace handling (e.g., trim before submit), and ensure error messaging stays clear and navigation only happens on success."
+        },
+        {
+          "path": "frontend/src/hooks/admin/useAdminSession.ts",
+          "operation": "modify",
+          "description": "Replace the current hardcoded credential check + actor.isCallerAdmin() dependency with a token-based login call, returning a token on success and surfacing safe, user-displayable errors for invalid credentials."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Use backend-issued admin session token stored in sessionStorage for admin route guarding, persistence, and logout.",
+      "acceptanceCriteria": [
+        "After a successful login, the app stores the backend-issued admin token in sessionStorage and considers the admin session authenticated.",
+        "AdminRouteGuard uses the backend token validation to allow/deny access to /admin/* routes.",
+        "Refreshing the page preserves admin login state for the current browser session (until logout or token invalidation).",
+        "Logging out clears the stored admin token and redirects/restricts access to admin routes."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/admin/useAdminSession.ts",
+          "operation": "modify",
+          "description": "Implement sessionStorage token persistence (e.g., an ADMIN_TOKEN_KEY), add a token validation query that calls the backend token validation capability, and update logout to clear the token and invalidate/clear relevant cached queries."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminRouteGuard.tsx",
+          "operation": "modify",
+          "description": "Update the guard to rely on the new token-backed useAdminSession validation state (instead of any caller/admin checks), redirecting to /admin/login when the token is missing/invalid and allowing access when valid."
+        },
+        {
+          "path": "frontend/src/utils/urlParams.ts",
+          "operation": "modify",
+          "description": "Ensure sessionStorage utilities are used consistently for the admin token lifecycle (store/read/clear) and that no sensitive admin token is persisted in the URL as part of the updated flow."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Confirm admin routes remain properly wired with AdminRouteGuard around /admin/dashboard and that navigation after login/logout continues to work with token-based session state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Authorize admin product create/update/delete from the UI using the admin session token and handle missing/invalid token gracefully without affecting public browsing.",
+      "acceptanceCriteria": [
+        "After admin login, create/update/delete product actions succeed (no unauthorized errors) when a valid token is present.",
+        "When not logged in (or when the token is missing/invalid), create/update/delete product actions fail gracefully and the UI shows an appropriate error message.",
+        "Customer-facing product browsing remains public and unaffected by admin authentication changes."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/products/useProductMutations.ts",
+          "operation": "modify",
+          "description": "Update product create/update/delete mutations to include the admin session token (from sessionStorage or a shared admin session hook) when calling backend product-management capabilities, and normalize authorization failures into user-friendly errors."
+        },
+        {
+          "path": "frontend/src/components/admin/ProductEditorDialog.tsx",
+          "operation": "modify",
+          "description": "Ensure create/update flows surface unauthorized/missing-token errors clearly (e.g., via existing toast error handling) and do not leave the dialog in a broken pending state when authorization fails."
+        },
+        {
+          "path": "frontend/src/components/admin/ProductTable.tsx",
+          "operation": "modify",
+          "description": "Ensure delete flows surface unauthorized/missing-token errors clearly (using existing toast error handling) and that the confirmation dialog closes/recovers appropriately on failure."
+        },
+        {
+          "path": "frontend/src/hooks/products/useProducts.ts",
+          "operation": "modify",
+          "description": "Verify customer-facing product read queries remain public (no admin token required) and are not coupled to admin session state changes beyond normal cache invalidation."
+        }
+      ]
+    }
+  ]
+}

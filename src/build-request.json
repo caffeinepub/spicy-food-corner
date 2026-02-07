@@ -1,0 +1,98 @@
+{
+  "kind": "build_request",
+  "title": "Fix Admin Panel login ('Invalid password') and make admin auth work end-to-end",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-11",
+      "text": "Fix Admin Panel login so that entering the exact admin credentials (username \"foodram corner\" including the space, password \"ram4792sa\") successfully logs in instead of showing an error like \"Invalid password\".",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-1",
+          "msg-user-2"
+        ],
+        "quotes": [
+          "iincalid password show krta hai",
+          "hh thik kr do"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On /admin/login, submitting username exactly \"foodram corner\" and password exactly \"ram4792sa\" navigates to /admin/dashboard.",
+        "Submitting incorrect credentials shows a clear error message and does not navigate.",
+        "Username/password input handling does not accidentally fail due to leading/trailing whitespace (e.g., trimming is applied consistently or the UI clearly communicates the exact matching rules)."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Implement proper custom admin authentication in the backend (Motoko) so the Admin Panel does not depend on Internet Identity principals or caller-based admin checks for login. Add backend methods to (1) authenticate the admin username/password and return a session token, and (2) validate a token for subsequent admin-only actions.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-user-1",
+          "msg-user-2"
+        ],
+        "quotes": [
+          "admin panel logi nahi hu raha hai",
+          "iincalid password show krta hai"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes an admin login method that accepts username/password and returns a session token on success (and fails on invalid credentials).",
+        "Backend exposes a token validation method that returns whether a given token is currently valid.",
+        "No admin login flow requires Internet Identity to be enabled/used.",
+        "Invalid credentials do not trap the canister; they return a safe error result that the frontend can display."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Update the frontend admin session logic to use the backend-issued admin session token (stored in sessionStorage) for route guarding and session persistence, instead of relying on caller-based `actor.isCallerAdmin()` checks.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-2"
+        ],
+        "quotes": [
+          "iincalid password show krta hai"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After a successful login, the app stores the backend-issued admin token in sessionStorage and considers the admin session authenticated.",
+        "AdminRouteGuard uses the backend token validation to allow/deny access to /admin/* routes.",
+        "Refreshing the page preserves admin login state for the current browser session (until logout or token invalidation).",
+        "Logging out clears the stored admin token and redirects/restricts access to admin routes."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Ensure all admin-restricted product management operations (create/update/delete) are authorized using the admin session token, so an admin who logged in via username/password can manage products successfully.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-user-1"
+        ],
+        "quotes": [
+          "admin panel logi nahi hu raha hai"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After admin login, create/update/delete product actions succeed (no unauthorized errors) when a valid token is present.",
+        "When not logged in (or when the token is missing/invalid), create/update/delete product actions fail gracefully and the UI shows an appropriate error message.",
+        "Customer-facing product browsing remains public and unaffected by admin authentication changes."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (Shadcn components are read-only).",
+    "Do not edit any frontend paths listed as immutable in SYSTEM_CONTEXT (compose around them instead).",
+    "Backend must remain a single Motoko actor in backend/main.mo; add backend/migration.mo only if an upgrade requires state migration."
+  ],
+  "nonGoals": [
+    "Adding third-party authentication providers (only custom credentials + backend token flow is in scope).",
+    "Implementing real-time updates via WebSockets or push notifications."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

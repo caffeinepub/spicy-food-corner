@@ -1,0 +1,66 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-fix-admin-panel-login-so-that-entering-the-exact-admin-credentials-username-foodram-corner-including-the-space-password-ram4792sa-successfully-logs-in-instead-of-showing-an-error-like-invalid-password",
+      "featureTitle": "Fix Admin Panel login so that entering the exact admin credentials (username \"foodram corner\" including the space, password \"ram4792sa\") successfully logs in instead of showing an error like \"Invalid password\".",
+      "files": [
+        "frontend/src/hooks/admin/useAdminSession.ts",
+        "frontend/src/pages/admin/AdminLoginPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-frontend-admin-session-logic-to-use-the-backend-issued-admin-session-token-stored-in-sessionstorage-for-route-guarding-and-session-persistence-instead-of-relying-on-caller-based-actor-iscalleradmin-checks",
+      "featureTitle": "Update the frontend admin session logic to use the backend-issued admin session token (stored in sessionStorage) for route guarding and session persistence, instead of relying on caller-based `actor.isCallerAdmin()` checks.",
+      "files": [
+        "frontend/src/hooks/admin/useAdminSession.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-all-admin-restricted-product-management-operations-create-update-delete-are-authorized-using-the-admin-session-token-so-an-admin-who-logged-in-via-username-password-can-manage-products-successfully",
+      "featureTitle": "Ensure all admin-restricted product management operations (create/update/delete) are authorized using the admin session token, so an admin who logged in via username/password can manage products successfully.",
+      "files": [
+        "frontend/src/hooks/products/useProductMutations.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

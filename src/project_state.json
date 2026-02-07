@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Spicy Food Corner: a simple mobile-friendly food & grocery website opened via QR/link where customers browse products and place one-click orders via WhatsApp; owner manages products via a secure admin panel with custom username/password login. Categories are fixed to Food and Grocery, and WhatsApp number is 9897743469.",
+  "architectural_notes": [
+    "Target platform mentioned: Internet Computer (Motoko backend + React frontend).",
+    "Admin auth decision: custom username/password (not Internet Identity).",
+    "Fixed categories: Food and Grocery only.",
+    "WhatsApp ordering target number: 9897743469.",
+    "Admin Panel credentials chosen by user: username \"foodram corner\" (with space), password \"ram4792sa\" (to be set as the admin login)."
+  ],
+  "known_issues": [
+    "Admin credentials were shared in chat; rotate/change password after setup to avoid exposure.",
+    "Admin panel login is failing and shows \"invalid password\" even when using the provided credentials (username \"foodram corner\", password \"ram4792sa\")."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-create-a-public-customer-panel-page-that-loads-and-displays-all-products-without-requiring-login-display-product-image-name-price-and-category-and-support-browsing-by-the-two-fixed-categories-food-grocery",
+      "title": "Create a public Customer Panel page that loads and displays all products without requiring login. Display product image, name, price, and category, and support browsing by the two fixed categories (Food, Grocery).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-order-on-whatsapp-button-for-each-product-that-opens-whatsapp-using-a-wa-me-link-to-whatsapp-number-9897743469-with-a-pre-filled-message-including-product-name-and-price",
+      "title": "Add an \"Order on WhatsApp\" button for each product that opens WhatsApp using a wa.me link to WhatsApp number 9897743469 with a pre-filled message including product name and price.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-admin-panel-ui-with-custom-username-password-login-and-a-protected-product-management-area-to-add-edit-and-delete-products-product-form-must-include-image-upload-selection-name-price-and-category-food-grocery",
+      "title": "Create an Admin Panel UI with custom username/password login, and a protected product management area to add, edit, and delete products. Product form must include: image upload/selection, name, price, and category (Food|Grocery).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-product-image-handling-end-to-end-admin-can-associate-an-image-with-a-product-and-the-customer-panel-displays-it-reliably-ensure-images-are-optimized-for-mobile-reasonable-size-and-safe-file-types-are-enforced",
+      "title": "Implement product image handling end-to-end: admin can associate an image with a product, and the Customer Panel displays it reliably. Ensure images are optimized for mobile (reasonable size) and safe file types are enforced.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-product-listing-section-page-that-shows-all-products-categorized-food-and-grocery-and-stays-consistent-with-admin-changes-using-shared-product-query-state",
+      "title": "Add a Product Listing section/page that shows all products categorized (Food and Grocery) and stays consistent with admin changes (using shared product query/state).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-visual-theme-and-branding-across-the-site-customer-panel-admin-panel-using-a-warm-spicy-street-food-aesthetic-e-g-chili-reds-saffron-orange-neutral-background-consistent-typography-and-clear-mobile-friendly-layouts",
+      "title": "Apply a coherent visual theme and branding across the site (Customer Panel + Admin Panel) using a warm, spicy street-food aesthetic (e.g., chili reds, saffron/orange, neutral background), consistent typography, and clear mobile-friendly layouts.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-static-branding-images-and-use-them-in-the-ui-a-logo-and-a-hero-banner-illustration-for-the-customer-panel",
+      "title": "Add generated static branding images and use them in the UI: a logo and a hero/banner illustration for the Customer Panel.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-panel-login-validation-to-accept-the-exact-admin-credentials-provided-by-the-user-username-foodram-corner-including-the-space-and-password-ram4792sa",
+      "title": "Update the Admin Panel login validation to accept the exact admin credentials provided by the user: username \"foodram corner\" (including the space) and password \"ram4792sa\".",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-admin-panel-login-so-that-entering-the-exact-admin-credentials-username-foodram-corner-including-the-space-password-ram4792sa-successfully-logs-in-instead-of-showing-an-error-like-invalid-password",
+      "title": "Fix Admin Panel login so that entering the exact admin credentials (username \"foodram corner\" including the space, password \"ram4792sa\") successfully logs in instead of showing an error like \"Invalid password\".",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-admin-session-logic-to-use-the-backend-issued-admin-session-token-stored-in-sessionstorage-for-route-guarding-and-session-persistence-instead-of-relying-on-caller-based-actor-iscalleradmin-checks",
+      "title": "Update the frontend admin session logic to use the backend-issued admin session token (stored in sessionStorage) for route guarding and session persistence, instead of relying on caller-based `actor.isCallerAdmin()` checks.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-all-admin-restricted-product-management-operations-create-update-delete-are-authorized-using-the-admin-session-token-so-an-admin-who-logged-in-via-username-password-can-manage-products-successfully",
+      "title": "Ensure all admin-restricted product management operations (create/update/delete) are authorized using the admin session token, so an admin who logged in via username/password can manage products successfully.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Public customer panel to browse food & grocery products (image, name, price, category) without login; optimized for mobile and QR/link entry.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "One-click 'Order on WhatsApp' per product using wa.me link with pre-filled order message to WhatsApp number 9897743469.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Admin/owner panel with custom username/password authentication (no Internet Identity).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Admin product management: add products with photo upload, name, price, category; update/delete; changes immediately reflect on customer panel.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Product listing panel/section showing all products categorized with auto-update when admin changes products; categories fixed to Food & Grocery (no admin-created categories).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Implement backend data storage and APIs for products with fixed categories: Food and Grocery. Each product must include: id, name, price, category (Food|Grocery), image (stored as a frontend static asset reference or stored content), createdAt, updatedAt.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Implement custom admin authentication using username/password (no Internet Identity). Support: (1) initial admin credential setup (first-run), (2) login returning a session token, (3) logout, (4) token validation for protected admin operations.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Implement proper custom admin authentication in the backend (Motoko) so the Admin Panel does not depend on Internet Identity principals or caller-based admin checks for login. Add backend methods to (1) authenticate the admin username/password and return a session token, and (2) validate a token for subsequent admin-only actions.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Spicy Food Corner",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

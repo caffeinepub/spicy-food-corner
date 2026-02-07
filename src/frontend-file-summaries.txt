@@ -1,0 +1,5 @@
+{
+  "frontend/src/hooks/admin/useAdminSession.ts": "Admin session management hooks with credential validation (trimmed username/password), session storage, and backend admin verification via isCallerAdmin().",
+  "frontend/src/pages/admin/AdminLoginPage.tsx": "Admin login page component with form inputs that trim whitespace before submission and display error messages for invalid credentials.",
+  "frontend/src/hooks/products/useProductMutations.ts": "Product mutation hooks (create, update, delete) with enhanced error handling for unauthorized access and user-friendly toast notifications."
+}

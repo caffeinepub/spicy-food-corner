@@ -1,0 +1,82 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-07T11:05:18.908Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-11",
+        "summary": "Fix Admin Panel login so that entering the exact admin credentials (username \"foodram corner\" including the space, password \"ram4792sa\") successfully logs in instead of showing an error like \"Invalid password\".",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/admin/AdminLoginPage.tsx",
+          "frontend/src/hooks/admin/useAdminSession.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/admin/AdminLoginPage.tsx",
+          "frontend/src/hooks/admin/useAdminSession.ts"
+        ]
+      },
+      {
+        "id": "REQ-12",
+        "summary": "Implement proper custom admin authentication in the backend (Motoko) so the Admin Panel does not depend on Internet Identity principals or caller-based admin checks for login. Add backend methods to (1) authenticate the admin username/password and return a session token, and (2) validate a token for subsequent admin-only actions.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-13",
+        "summary": "Update the frontend admin session logic to use the backend-issued admin session token (stored in sessionStorage) for route guarding and session persistence, instead of relying on caller-based `actor.isCallerAdmin()` checks.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/admin/useAdminSession.ts",
+          "frontend/src/components/admin/AdminRouteGuard.tsx",
+          "frontend/src/utils/urlParams.ts",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/admin/useAdminSession.ts"
+        ]
+      },
+      {
+        "id": "REQ-14",
+        "summary": "Ensure all admin-restricted product management operations (create/update/delete) are authorized using the admin session token, so an admin who logged in via username/password can manage products successfully.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/products/useProductMutations.ts",
+          "frontend/src/components/admin/ProductEditorDialog.tsx",
+          "frontend/src/components/admin/ProductTable.tsx",
+          "frontend/src/hooks/products/useProducts.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/products/useProductMutations.ts"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/admin/useAdminSession.ts",
+    "frontend/src/hooks/products/useProductMutations.ts",
+    "frontend/src/pages/admin/AdminLoginPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}
