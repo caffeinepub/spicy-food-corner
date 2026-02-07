@@ -1,17 +1,22 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
-  "summary": "Spicy Food Corner: a simple mobile-friendly food & grocery website opened via QR/link where customers browse products and place one-click orders via WhatsApp; owner manages products via a secure admin panel with custom username/password login. Categories are fixed to Food and Grocery, and WhatsApp number is 9897743469.",
+  "projectStateVersion": 15,
+  "summary": "Spicy Food Corner: a simple mobile-friendly food & grocery website opened via QR/link where customers browse products and place orders via WhatsApp—either one-click per product or via a cart + order form (name, mobile, address) that sends full multi-item details to WhatsApp; owner manages products via a secure admin panel with custom username/password login. Categories are fixed to Food and Grocery, and WhatsApp number is 9897743469.",
   "architectural_notes": [
     "Target platform mentioned: Internet Computer (Motoko backend + React frontend).",
     "Admin auth decision: custom username/password (not Internet Identity).",
     "Fixed categories: Food and Grocery only.",
     "WhatsApp ordering target number: 9897743469.",
-    "Admin Panel credentials chosen by user: username \"foodram corner\" (with space), password \"ram4792sa\" (to be set as the admin login)."
+    "Admin Panel credentials chosen by user: username \"foodram corner\" (with space), password \"ram4792sa\" (to be set as the admin login).",
+    "User requests using an alternative admin login method/flow because current username/password login continues to fail (\"Invalid password\").",
+    "Customers can place multi-item orders via an Add-to-Cart + quantity selection flow, then 'Proceed to Order' opens an order form that sends the full order to WhatsApp.",
+    "Order form fields: Customer Name, Mobile Number, Delivery Address; product details auto-filled from cart and sent to WhatsApp.",
+    "Both options must remain available: direct per-product WhatsApp order and order-form/cart-based WhatsApp ordering."
   ],
   "known_issues": [
     "Admin credentials were shared in chat; rotate/change password after setup to avoid exposure.",
-    "Admin panel login is failing and shows \"invalid password\" even when using the provided credentials (username \"foodram corner\", password \"ram4792sa\")."
+    "Admin panel login is failing and shows \"invalid password\" even when using the provided credentials (username \"foodram corner\", password \"ram4792sa\").",
+    "Admin Panel bug: after adding one product, the “Add Product/Add New Product” button disappears, preventing adding a second product."
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -102,6 +107,94 @@
         "REQ-14"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-fix-the-frontend-admin-login-flow-to-authenticate-against-the-backend-login-method-req-15-store-the-returned-session-token-in-sessionstorage-and-stop-using-actor-iscalleradmin-and-the-adminauthenticated-boolean-flag-as-the-source-of-truth",
+      "title": "Fix the frontend admin login flow to authenticate against the backend login method (REQ-15), store the returned session token in `sessionStorage`, and stop using `actor.isCallerAdmin()` and the `adminAuthenticated` boolean flag as the source of truth.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-adminrouteguard-admin-session-checking-to-validate-authentication-using-the-backend-issued-admin-session-token-stored-in-sessionstorage-and-clear-it-if-invalid-expired",
+      "title": "Update `AdminRouteGuard` / admin session checking to validate authentication using the backend-issued admin session token stored in `sessionStorage` (and clear it if invalid/expired).",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-all-frontend-admin-product-mutations-create-update-delete-send-or-otherwise-use-the-backend-issued-admin-session-token-so-that-product-management-works-after-logging-in-via-username-password",
+      "title": "Ensure all frontend admin product mutations (create/update/delete) send or otherwise use the backend-issued admin session token so that product management works after logging in via username/password.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-customer-add-to-cart-system-that-allows-adding-multiple-different-products-updating-item-quantities-removing-items-and-persisting-the-cart-for-the-current-browser-session-without-requiring-login",
+      "title": "Implement a customer Add-to-Cart system that allows adding multiple different products, updating item quantities, removing items, and persisting the cart for the current browser session without requiring login.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-customer-facing-product-cards-to-provide-both-ordering-options-keep-the-existing-per-product-order-on-whatsapp-action-and-add-an-add-to-cart-action",
+      "title": "Update the customer-facing product cards to provide both ordering options: keep the existing per-product “Order on WhatsApp” action and add an “Add to Cart” action.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-cart-page-or-cart-drawer-accessible-from-the-site-header-navigation-that-shows-cart-items-with-image-name-unit-price-quantity-controls-line-total-and-a-cart-summary-with-a-proceed-to-order-action",
+      "title": "Add a Cart page or Cart drawer (accessible from the site header navigation) that shows cart items with image, name, unit price, quantity controls, line total, and a cart summary with a “Proceed to Order” action.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-checkout-order-form-that-opens-when-the-customer-clicks-proceed-to-order-from-the-cart-collecting-customer-name-mobile-number-and-delivery-address-and-automatically-including-the-selected-cart-product-details-items-quantities",
+      "title": "Create a checkout Order Form that opens when the customer clicks “Proceed to Order” from the cart, collecting Customer Name, Mobile Number, and Delivery Address, and automatically including the selected cart product details (items + quantities).",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-order-form-submission-generate-a-whatsapp-wa-me-link-to-the-existing-whatsapp-number-9897743469-919897743469-containing-a-pre-filled-message-with-customer-details-and-the-full-multi-item-cart-product-names-quantities-and-prices-then-open-whatsapp-in-a-new-tab-window",
+      "title": "On Order Form submission, generate a WhatsApp wa.me link to the existing WhatsApp number (9897743469 / 919897743469) containing a pre-filled message with customer details and the full multi-item cart (product names, quantities, and prices), then open WhatsApp in a new tab/window.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-admin-login-flow-to-display-an-accurate-error-message-based-on-the-actual-backend-failure-reason-e-g-distinguish-invalid-credentials-from-a-network-actor-error-while-keeping-all-user-facing-text-in-english",
+      "title": "Update the frontend Admin Login flow to display an accurate error message based on the actual backend failure reason (e.g., distinguish invalid credentials from a network/actor error), while keeping all user-facing text in English.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-admin-dashboard-ui-so-the-admin-can-always-access-an-add-product-action-after-creating-the-first-product-i-e-the-add-product-button-must-not-disappear-allowing-multiple-products-to-be-created-in-succession",
+      "title": "Fix the Admin Dashboard UI so the admin can always access an \"Add Product\" action after creating the first product (i.e., the Add Product button must not disappear), allowing multiple products to be created in succession.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-the-admin-dashboard-product-management-screen-so-the-add-product-action-is-discoverable-even-when-the-product-list-is-long-e-g-provide-an-additional-in-context-add-product-entry-point-near-the-product-list-and-or-a-persistent-sticky-action-on-small-screens-without-removing-the-existing-top-action-button",
+      "title": "Improve the Admin Dashboard product management screen so the \"Add Product\" action is discoverable even when the product list is long (e.g., provide an additional in-context Add Product entry point near the product list and/or a persistent/sticky action on small screens), without removing the existing top action button.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -157,6 +250,68 @@
       "reqIds": [
         "REQ-12"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Change/replace the current admin login approach with an alternative method (since username/password login still fails with \"Invalid password\").",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Implement backend custom admin authentication that does not rely on `AccessControl.isAdmin(caller)` or Internet Identity principals: add a login method that accepts the exact credentials username \"foodram corner\" and password \"ram4792sa\" and returns a backend-issued admin session token, plus a method to validate that token for subsequent admin authorization checks.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Update backend product management authorization to use the backend-issued admin session token (from REQ-15) instead of `AccessControl.isAdmin(accessControlState, caller)` for admin-restricted operations (create/update/delete products).",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add-to-Cart system: customers can add multiple products to a cart, adjust quantities, and proceed to checkout/order from the cart (no login).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Order Form checkout flow: on 'Proceed to Order' open a simple mobile-responsive form to collect Customer Name, Mobile Number, Delivery Address; auto-include selected cart product details (items + quantities) and send the complete order to WhatsApp.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Support both ordering options: keep direct 'Order on WhatsApp' per product AND cart/order-form-based WhatsApp ordering, letting customers choose either method.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Fix backend admin credential validation so that logging in with username \"foodram corner\" (including the space) and password \"ram4792sa\" succeeds reliably and does not incorrectly return an invalid-credentials error.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Make backend admin session tokens robust: generate a unique, hard-to-guess session token per successful login and store it so that `isAdminSession(token)` returns true immediately after login.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Fix Admin Panel product management UI so the “Add Product / Add New Product” button remains visible after adding the first product, allowing multiple products to be added (no one-product-only limitation).",
+      "reqIds": [],
       "status": "pending"
     }
   ],

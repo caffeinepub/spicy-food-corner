@@ -1,9 +1,9 @@
-import { Product } from '@/backend';
+import { ProductSummary } from '@/backend';
 import ProductGrid from './ProductGrid';
 
 interface CategorySectionProps {
   title: string;
-  products: Product[];
+  products: ProductSummary[];
   emptyMessage: string;
 }
 

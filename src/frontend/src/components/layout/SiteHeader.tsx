@@ -1,16 +1,25 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
+import { useCartContext } from '@/components/cart/CartProvider';
 
 export default function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { getItemCount } = useCartContext();
+  const itemCount = getItemCount();
 
   const navItems = [
     { label: 'Home', path: '/' },
     { label: 'All Products', path: '/products' },
   ];
+
+  const handleCartClick = () => {
+    setMobileMenuOpen(false);
+    navigate({ to: '/cart' });
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -39,6 +48,23 @@ export default function SiteHeader() {
             <Button
               variant="outline"
               size="sm"
+              className="relative"
+              onClick={handleCartClick}
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Cart
+              {itemCount > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                >
+                  {itemCount}
+                </Badge>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => navigate({ to: '/admin/login' })}
             >
               Admin
@@ -46,17 +72,35 @@ export default function SiteHeader() {
           </nav>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <Button
+              variant="outline"
+              size="icon"
+              className="relative"
+              onClick={handleCartClick}
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                >
+                  {itemCount}
+                </Badge>
+              )}
+            </Button>
+            <button
+              className="p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}

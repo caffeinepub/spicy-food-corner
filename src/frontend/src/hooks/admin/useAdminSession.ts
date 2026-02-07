@@ -1,38 +1,93 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useActor } from '../useActor';
-import { storeSessionParameter, getSessionParameter, clearSessionParameter } from '@/utils/urlParams';
+import { normalizeAdminAuthError, isTransientError, AdminAuthErrorType } from '@/utils/adminAuthErrors';
 
-const ADMIN_SESSION_KEY = 'adminAuthenticated';
+const ADMIN_TOKEN_KEY = 'adminSessionToken';
 
 interface LoginParams {
   username: string;
   password: string;
 }
 
+function getStoredToken(): string | null {
+  try {
+    return sessionStorage.getItem(ADMIN_TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function storeToken(token: string): void {
+  try {
+    sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
+  } catch (error) {
+    console.error('Failed to store admin token:', error);
+  }
+}
+
+function clearToken(): void {
+  try {
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+  } catch (error) {
+    console.error('Failed to clear admin token:', error);
+  }
+}
+
 export function useAdminSession() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   const query = useQuery({
     queryKey: ['adminSession'],
     queryFn: async () => {
-      const isAuthenticated = getSessionParameter(ADMIN_SESSION_KEY) === 'true';
-      if (!isAuthenticated || !actor) return { isAuthenticated: false };
+      if (!actor) {
+        // Actor not available - keep existing token if present (transient issue)
+        const token = getStoredToken();
+        return { 
+          isAuthenticated: false, 
+          token,
+          isConnectivityIssue: true 
+        };
+      }
+
+      const token = getStoredToken();
+      if (!token) {
+        return { isAuthenticated: false, token: null, isConnectivityIssue: false };
+      }
 
       try {
-        const isAdmin = await actor.isCallerAdmin();
-        return { isAuthenticated: isAdmin };
-      } catch {
-        clearSessionParameter(ADMIN_SESSION_KEY);
-        return { isAuthenticated: false };
+        const isValid = await actor.isAdminSession(token);
+        if (!isValid) {
+          // Token is invalid - clear it
+          clearToken();
+          return { isAuthenticated: false, token: null, isConnectivityIssue: false };
+        }
+        return { isAuthenticated: true, token, isConnectivityIssue: false };
+      } catch (error) {
+        console.error('Token validation error:', error);
+        
+        // Only clear token if it's not a transient connectivity issue
+        if (!isTransientError(error)) {
+          clearToken();
+        }
+        
+        return { 
+          isAuthenticated: false, 
+          token: isTransientError(error) ? token : null,
+          isConnectivityIssue: isTransientError(error)
+        };
       }
     },
-    enabled: !!actor,
+    enabled: !!actor && !actorFetching,
     staleTime: 60000, // 1 minute
+    retry: false,
   });
 
   return {
     isAuthenticated: query.data?.isAuthenticated || false,
-    isLoading: query.isLoading,
+    token: query.data?.token || null,
+    isLoading: actorFetching || query.isLoading,
+    isFetched: !!actor && query.isFetched,
+    isConnectivityIssue: query.data?.isConnectivityIssue || false,
   };
 }
 
@@ -42,27 +97,21 @@ export function useAdminLogin() {
 
   return useMutation({
     mutationFn: async ({ username, password }: LoginParams) => {
-      if (!actor) throw new Error('Actor not available');
-
-      // Trim whitespace from inputs
-      const trimmedUsername = username.trim();
-      const trimmedPassword = password.trim();
-
-      // Validate credentials
-      if (trimmedUsername !== 'foodram corner' || trimmedPassword !== 'ram4792sa') {
-        throw new Error('Invalid username or password');
+      if (!actor) {
+        const error = new Error('Actor not available');
+        throw error;
       }
 
-      // Verify admin status with backend
       try {
-        const isAdmin = await actor.isCallerAdmin();
-        if (!isAdmin) {
-          throw new Error('Invalid credentials or insufficient permissions');
+        const token = await actor.loginAdmin(username, password);
+        if (!token || token.trim() === '') {
+          throw new Error('Invalid credentials');
         }
-        storeSessionParameter(ADMIN_SESSION_KEY, 'true');
-        return { success: true };
+        storeToken(token);
+        return { success: true, token };
       } catch (error) {
-        throw new Error('Invalid username or password');
+        // Re-throw the original error so it can be normalized by the UI
+        throw error;
       }
     },
     onSuccess: () => {
@@ -76,10 +125,14 @@ export function useAdminLogout() {
 
   return useMutation({
     mutationFn: async () => {
-      clearSessionParameter(ADMIN_SESSION_KEY);
+      clearToken();
     },
     onSuccess: () => {
       queryClient.clear();
     },
   });
+}
+
+export function getAdminToken(): string | null {
+  return getStoredToken();
 }

@@ -14,9 +14,6 @@ export class ExternalBlob {
     static fromBytes(blob: Uint8Array<ArrayBuffer>): ExternalBlob;
     withUploadProgress(onProgress: (percentage: number) => void): ExternalBlob;
 }
-export interface UserProfile {
-    name: string;
-}
 export interface Product {
     id: string;
     name: string;
@@ -25,6 +22,22 @@ export interface Product {
     category: ProductCategory;
     image: ExternalBlob;
     price: bigint;
+}
+export interface ProductSummary {
+    id: string;
+    name: string;
+    category: ProductCategory;
+    image: ExternalBlob;
+    price: bigint;
+}
+export interface ProductInput {
+    name: string;
+    category: ProductCategory;
+    image: ExternalBlob;
+    price: bigint;
+}
+export interface UserProfile {
+    name: string;
 }
 export enum ProductCategory {
     food = "food",
@@ -37,17 +50,19 @@ export enum UserRole {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    createProduct(name: string, price: bigint, category: ProductCategory, image: ExternalBlob): Promise<Product>;
-    deleteProduct(id: string): Promise<void>;
-    getAllProducts(): Promise<Array<Product>>;
+    createProduct(token: string, input: ProductInput): Promise<ProductSummary>;
+    deleteProduct(token: string, id: string): Promise<void>;
+    getAllProducts(): Promise<Array<ProductSummary>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getFoodProducts(): Promise<Array<Product>>;
-    getGroceryProducts(): Promise<Array<Product>>;
+    getFoodProducts(): Promise<Array<ProductSummary>>;
+    getGroceryProducts(): Promise<Array<ProductSummary>>;
     getProduct(id: string): Promise<Product>;
     getProductImage(id: string): Promise<ExternalBlob>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    isAdminSession(token: string): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
+    loginAdmin(username: string, password: string): Promise<string>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    updateProduct(id: string, name: string, price: bigint, category: ProductCategory, image: ExternalBlob): Promise<Product>;
+    updateProduct(token: string, id: string, input: ProductInput): Promise<ProductSummary>;
 }

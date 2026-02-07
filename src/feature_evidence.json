@@ -2,11 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-fix-admin-panel-login-so-that-entering-the-exact-admin-credentials-username-foodram-corner-including-the-space-password-ram4792sa-successfully-logs-in-instead-of-showing-an-error-like-invalid-password",
-      "featureTitle": "Fix Admin Panel login so that entering the exact admin credentials (username \"foodram corner\" including the space, password \"ram4792sa\") successfully logs in instead of showing an error like \"Invalid password\".",
+      "featureId": "feature-fix-the-admin-dashboard-ui-so-the-admin-can-always-access-an-add-product-action-after-creating-the-first-product-i-e-the-add-product-button-must-not-disappear-allowing-multiple-products-to-be-created-in-succession",
+      "featureTitle": "Fix the Admin Dashboard UI so the admin can always access an \"Add Product\" action after creating the first product (i.e., the Add Product button must not disappear), allowing multiple products to be created in succession.",
       "files": [
-        "frontend/src/hooks/admin/useAdminSession.ts",
-        "frontend/src/pages/admin/AdminLoginPage.tsx"
+        "frontend/src/components/admin/ProductEditorDialog.tsx",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -18,15 +18,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-11"
+        "REQ-28"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-frontend-admin-session-logic-to-use-the-backend-issued-admin-session-token-stored-in-sessionstorage-for-route-guarding-and-session-persistence-instead-of-relying-on-caller-based-actor-iscalleradmin-checks",
-      "featureTitle": "Update the frontend admin session logic to use the backend-issued admin session token (stored in sessionStorage) for route guarding and session persistence, instead of relying on caller-based `actor.isCallerAdmin()` checks.",
+      "featureId": "feature-improve-the-admin-dashboard-product-management-screen-so-the-add-product-action-is-discoverable-even-when-the-product-list-is-long-e-g-provide-an-additional-in-context-add-product-entry-point-near-the-product-list-and-or-a-persistent-sticky-action-on-small-screens-without-removing-the-existing-top-action-button",
+      "featureTitle": "Improve the Admin Dashboard product management screen so the \"Add Product\" action is discoverable even when the product list is long (e.g., provide an additional in-context Add Product entry point near the product list and/or a persistent/sticky action on small screens), without removing the existing top action button.",
       "files": [
-        "frontend/src/hooks/admin/useAdminSession.ts"
+        "frontend/src/components/admin/ProductTable.tsx",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -38,27 +39,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-13"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-ensure-all-admin-restricted-product-management-operations-create-update-delete-are-authorized-using-the-admin-session-token-so-an-admin-who-logged-in-via-username-password-can-manage-products-successfully",
-      "featureTitle": "Ensure all admin-restricted product management operations (create/update/delete) are authorized using the admin session token, so an admin who logged in via username/password can manage products successfully.",
-      "files": [
-        "frontend/src/hooks/products/useProductMutations.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "blob-storage@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-14"
+        "REQ-29"
       ],
       "confidence": "high"
     }

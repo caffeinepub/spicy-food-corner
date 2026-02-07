@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Lock } from 'lucide-react';
+import { Loader2, Lock, AlertCircle, WifiOff } from 'lucide-react';
+import { normalizeAdminAuthError, AdminAuthErrorType } from '@/utils/adminAuthErrors';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -17,12 +18,8 @@ export default function AdminLoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Trim values before submission
-    const trimmedUsername = username.trim();
-    const trimmedPassword = password.trim();
-    
     login(
-      { username: trimmedUsername, password: trimmedPassword },
+      { username, password },
       {
         onSuccess: () => {
           navigate({ to: '/admin/dashboard' });
@@ -30,6 +27,9 @@ export default function AdminLoginPage() {
       }
     );
   };
+
+  // Normalize the error for display
+  const normalizedError = error ? normalizeAdminAuthError(error) : null;
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
@@ -74,11 +74,18 @@ export default function AdminLoginPage() {
               />
             </div>
 
-            {error && (
+            {normalizedError && (
               <Alert variant="destructive">
-                <AlertDescription>
-                  {error instanceof Error ? error.message : 'Login failed. Please check your credentials.'}
-                </AlertDescription>
+                <div className="flex items-start gap-2">
+                  {normalizedError.type === AdminAuthErrorType.CONNECTIVITY_ISSUE ? (
+                    <WifiOff className="h-4 w-4 mt-0.5" />
+                  ) : (
+                    <AlertCircle className="h-4 w-4 mt-0.5" />
+                  )}
+                  <AlertDescription className="flex-1">
+                    {normalizedError.message}
+                  </AlertDescription>
+                </div>
               </Alert>
             )}
 

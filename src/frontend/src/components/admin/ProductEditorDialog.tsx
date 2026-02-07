@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Product, ProductCategory } from '@/backend';
+import { ProductSummary, ProductCategory } from '@/backend';
 import {
   Dialog,
   DialogContent,
@@ -28,7 +28,7 @@ interface ProductEditorDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   mode: 'create' | 'edit';
-  product?: Product;
+  product?: ProductSummary;
 }
 
 export default function ProductEditorDialog({
@@ -47,19 +47,34 @@ export default function ProductEditorDialog({
 
   const isPending = isCreating || isUpdating;
 
+  // Reset form when dialog opens/closes or mode changes
   useEffect(() => {
-    if (mode === 'edit' && product) {
-      setName(product.name);
-      setPrice(String(Number(product.price)));
-      setCategory(product.category);
-      setImage(product.image);
-    } else {
+    if (open) {
+      if (mode === 'edit' && product) {
+        setName(product.name);
+        setPrice(String(Number(product.price)));
+        setCategory(product.category);
+        setImage(product.image);
+      } else {
+        // Reset to defaults for create mode
+        setName('');
+        setPrice('');
+        setCategory(ProductCategory.food);
+        setImage(null);
+      }
+    }
+  }, [mode, product, open]);
+
+  // Additional cleanup when dialog closes
+  useEffect(() => {
+    if (!open && mode === 'create') {
+      // Ensure form is completely reset when create dialog closes
       setName('');
       setPrice('');
       setCategory(ProductCategory.food);
       setImage(null);
     }
-  }, [mode, product, open]);
+  }, [open, mode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,11 +91,9 @@ export default function ProductEditorDialog({
         { name, price: priceValue, category, image },
         {
           onSuccess: () => {
-            toast.success('Product created successfully');
+            // Close dialog and reset form
             onOpenChange(false);
-          },
-          onError: (error) => {
-            toast.error(error instanceof Error ? error.message : 'Failed to create product');
+            // Form will be reset by useEffect when open becomes false
           },
         }
       );
@@ -89,11 +102,7 @@ export default function ProductEditorDialog({
         { id: product.id, name, price: priceValue, category, image },
         {
           onSuccess: () => {
-            toast.success('Product updated successfully');
             onOpenChange(false);
-          },
-          onError: (error) => {
-            toast.error(error instanceof Error ? error.message : 'Failed to update product');
           },
         }
       );

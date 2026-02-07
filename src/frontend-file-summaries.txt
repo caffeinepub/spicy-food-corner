@@ -1,5 +1,24 @@
 {
-  "frontend/src/hooks/admin/useAdminSession.ts": "Admin session management hooks with credential validation (trimmed username/password), session storage, and backend admin verification via isCallerAdmin().",
-  "frontend/src/pages/admin/AdminLoginPage.tsx": "Admin login page component with form inputs that trim whitespace before submission and display error messages for invalid credentials.",
-  "frontend/src/hooks/products/useProductMutations.ts": "Product mutation hooks (create, update, delete) with enhanced error handling for unauthorized access and user-friendly toast notifications."
+  "frontend/src/hooks/admin/useAdminSession.ts": "Admin session management with token-based authentication that properly categorizes errors (credentials vs connectivity) and preserves stored tokens during transient failures.",
+  "frontend/src/pages/admin/AdminLoginPage.tsx": "Admin login page that displays normalized error messages with appropriate icons for invalid credentials vs connectivity issues.",
+  "frontend/src/hooks/products/useProductMutations.ts": "Product mutation hooks (create, update, delete) that retrieve the admin session token and pass it to backend methods with English admin-login-required error handling.",
+  "frontend/src/components/admin/AdminRouteGuard.tsx": "Route guard component that handles session validation gracefully, showing connectivity warnings without redirecting when there's a transient network issue.",
+  "frontend/src/components/admin/ProductEditorDialog.tsx": "Dialog component for creating and editing products with enhanced form reset logic that ensures complete state cleanup when the dialog closes, preventing stale form values on reopening.",
+  "frontend/src/components/admin/ProductTable.tsx": "Responsive product table component with empty state Add Product button, toolbar with product count and Add Product action, and edit/delete functionality for both desktop and mobile views.",
+  "frontend/src/hooks/products/useProducts.ts": "React Query hook that fetches all products from the backend as ProductSummary array with 30-second stale time.",
+  "frontend/src/pages/CustomerPanelPage.tsx": "Customer-facing page with hero section, category switcher, and filtered product grid with loading and error states.",
+  "frontend/src/pages/ProductListingPage.tsx": "Complete product listing page that displays all products organized by food and grocery categories with loading and error handling.",
+  "frontend/src/pages/admin/AdminDashboardPage.tsx": "Admin dashboard page with persistent Add Product button in header, product table with onAddProduct callback, and mobile floating action button for adding products on small screens.",
+  "frontend/src/components/products/ProductGrid.tsx": "Grid layout component that displays an array of ProductSummary items using ProductCard components in a responsive grid.",
+  "frontend/src/components/products/CategorySection.tsx": "Section component that displays a category title and ProductSummary grid with an empty state message when no products are available.",
+  "frontend/src/components/products/ProductCard.tsx": "Product card component displaying product details with both \"Add to Cart\" and \"Order on WhatsApp\" buttons with toast feedback.",
+  "frontend/src/types/cart.ts": "Defines TypeScript types for cart items, cart state, and cart actions used throughout the cart system.",
+  "frontend/src/hooks/cart/useCart.ts": "Custom React hook that manages cart state with sessionStorage persistence, providing add/remove/update/clear operations and computed totals.",
+  "frontend/src/components/cart/CartProvider.tsx": "React context provider that wraps the useCart hook and makes cart state and actions available throughout the application.",
+  "frontend/src/pages/CartPage.tsx": "Shopping cart page showing cart items with quantity controls, remove actions, order summary, and \"Proceed to Order\" button with empty state handling.",
+  "frontend/src/pages/CheckoutPage.tsx": "Checkout page with customer details form (name, mobile, address), read-only order summary, validation, and WhatsApp order submission with cart clearing.",
+  "frontend/src/utils/whatsapp.ts": "WhatsApp utility functions for generating wa.me URLs for both single-product orders and multi-item cart orders with formatted messages.",
+  "frontend/src/components/layout/SiteHeader.tsx": "Site header with navigation, cart icon showing item count badge, and mobile-responsive menu.",
+  "frontend/src/App.tsx": "Main application component with routing, CartProvider wrapper, and routes for cart and checkout pages.",
+  "frontend/src/utils/adminAuthErrors.ts": "Utility module that normalizes admin authentication errors into user-facing English messages, distinguishing between invalid credentials, connectivity issues, and system errors."
 }

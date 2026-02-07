@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make Admin Panel login work reliably end-to-end using custom backend authentication and a token-based admin session.
+**Goal:** Ensure the Admin Dashboard always provides a reliable, discoverable “Add Product” action so admins can create multiple products in a row without refreshing, including on long lists and small screens.
 
 **Planned changes:**
-- Fix the /admin/login flow so the exact admin credentials (username "foodram corner", password "ram4792sa") successfully authenticate and route to /admin/dashboard, while incorrect credentials show a clear error.
-- Add backend (Motoko) admin authentication endpoints: one to login with username/password and return a session token, and another to validate an admin token without requiring Internet Identity.
-- Update frontend admin session handling to store the backend-issued token in sessionStorage, use token validation for admin route guarding, persist session across refresh (within the browser session), and support logout by clearing the token.
-- Ensure admin-only product create/update/delete operations are authorized via the admin session token, with graceful failures and UI messaging when unauthenticated/invalid, while keeping customer browsing public.
+- Fix the Admin Dashboard state/UI so the “Add Product” action does not disappear after the first product is created and can reopen the create-product dialog immediately after a successful creation.
+- Add an additional, in-context “Add Product” entry point near the product list (including an empty-state action when there are zero products) while keeping the existing top action button.
+- Improve small-screen usability by ensuring there is a persistent/discoverable way to add a product when the list is long and the user has scrolled down.
 
-**User-visible outcome:** Admin can log in with the provided username/password, stay logged in during the browser session, access /admin/dashboard and other /admin/* pages, and successfully create/update/delete products; non-admin users cannot perform admin actions and see clear errors.
+**User-visible outcome:** Admins can add 3+ products consecutively in one session, and can always find an “Add Product” action (including from the empty state and while scrolled on mobile) that reliably opens and closes the create-product dialog for repeated use.

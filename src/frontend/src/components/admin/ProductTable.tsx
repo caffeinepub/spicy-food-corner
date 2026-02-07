@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product, ProductCategory } from '@/backend';
+import { ProductSummary, ProductCategory } from '@/backend';
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Plus } from 'lucide-react';
 import ProductEditorDialog from './ProductEditorDialog';
 import { useDeleteProduct } from '@/hooks/products/useProductMutations';
 import {
@@ -23,26 +23,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { toast } from 'sonner';
 
 interface ProductTableProps {
-  products: Product[];
+  products: ProductSummary[];
+  onAddProduct: () => void;
 }
 
-export default function ProductTable({ products }: ProductTableProps) {
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+export default function ProductTable({ products, onAddProduct }: ProductTableProps) {
+  const [editingProduct, setEditingProduct] = useState<ProductSummary | null>(null);
+  const [deletingProduct, setDeletingProduct] = useState<ProductSummary | null>(null);
   const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct();
 
   const handleDelete = () => {
     if (!deletingProduct) return;
     deleteProduct(deletingProduct.id, {
       onSuccess: () => {
-        toast.success('Product deleted successfully');
         setDeletingProduct(null);
-      },
-      onError: (error) => {
-        toast.error(error instanceof Error ? error.message : 'Failed to delete product');
       },
     });
   };
@@ -50,15 +46,32 @@ export default function ProductTable({ products }: ProductTableProps) {
   if (products.length === 0) {
     return (
       <div className="text-center py-16 border border-dashed border-border rounded-lg">
-        <p className="text-muted-foreground text-lg">
-          No products yet. Click "Add Product" to get started.
-        </p>
+        <div className="space-y-4">
+          <p className="text-muted-foreground text-lg">
+            No products yet. Click "Add Product" to get started.
+          </p>
+          <Button onClick={onAddProduct} size="lg">
+            <Plus className="mr-2 h-5 w-5" />
+            Add Product
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
     <>
+      {/* Toolbar with Add Product button */}
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-sm text-muted-foreground">
+          {products.length} {products.length === 1 ? 'product' : 'products'}
+        </p>
+        <Button onClick={onAddProduct} size="sm" className="hidden md:flex">
+          <Plus className="mr-2 h-4 w-4" />
+          Add Product
+        </Button>
+      </div>
+
       {/* Desktop Table */}
       <div className="hidden md:block border rounded-lg overflow-hidden">
         <Table>
@@ -78,33 +91,28 @@ export default function ProductTable({ products }: ProductTableProps) {
                   <img
                     src={product.image.getDirectURL()}
                     alt={product.name}
-                    className="h-12 w-12 object-cover rounded"
-                    onError={(e) => {
-                      e.currentTarget.src = '/assets/placeholder-product.svg';
-                    }}
+                    className="w-12 h-12 object-cover rounded"
                   />
                 </TableCell>
                 <TableCell className="font-medium">{product.name}</TableCell>
                 <TableCell>₹{Number(product.price)}</TableCell>
                 <TableCell>
-                  <Badge
-                    variant={product.category === ProductCategory.food ? 'default' : 'secondary'}
-                  >
-                    {product.category === ProductCategory.food ? 'Food' : 'Grocery'}
+                  <Badge variant={product.category === ProductCategory.food ? 'default' : 'secondary'}>
+                    {product.category === ProductCategory.food ? '🍛 Food' : '🛒 Grocery'}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant="ghost"
+                      size="icon"
                       onClick={() => setEditingProduct(product)}
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant="ghost"
+                      size="icon"
                       onClick={() => setDeletingProduct(product)}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
@@ -121,23 +129,20 @@ export default function ProductTable({ products }: ProductTableProps) {
       <div className="md:hidden space-y-4">
         {products.map((product) => (
           <div key={product.id} className="border rounded-lg p-4 space-y-3">
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <img
                 src={product.image.getDirectURL()}
                 alt={product.name}
-                className="h-20 w-20 object-cover rounded"
-                onError={(e) => {
-                  e.currentTarget.src = '/assets/placeholder-product.svg';
-                }}
+                className="w-20 h-20 object-cover rounded"
               />
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg">{product.name}</h3>
-                <p className="text-xl font-bold text-primary">₹{Number(product.price)}</p>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold truncate">{product.name}</h3>
+                <p className="text-lg font-bold text-primary">₹{Number(product.price)}</p>
                 <Badge
                   variant={product.category === ProductCategory.food ? 'default' : 'secondary'}
                   className="mt-1"
                 >
-                  {product.category === ProductCategory.food ? 'Food' : 'Grocery'}
+                  {product.category === ProductCategory.food ? '🍛 Food' : '🛒 Grocery'}
                 </Badge>
               </div>
             </div>
@@ -154,10 +159,10 @@ export default function ProductTable({ products }: ProductTableProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1"
+                className="flex-1 text-destructive hover:text-destructive"
                 onClick={() => setDeletingProduct(product)}
               >
-                <Trash2 className="h-4 w-4 mr-2 text-destructive" />
+                <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </Button>
             </div>
@@ -165,6 +170,7 @@ export default function ProductTable({ products }: ProductTableProps) {
         ))}
       </div>
 
+      {/* Edit Dialog */}
       {editingProduct && (
         <ProductEditorDialog
           open={!!editingProduct}
@@ -174,6 +180,7 @@ export default function ProductTable({ products }: ProductTableProps) {
         />
       )}
 
+      {/* Delete Confirmation */}
       <AlertDialog open={!!deletingProduct} onOpenChange={(open) => !open && setDeletingProduct(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

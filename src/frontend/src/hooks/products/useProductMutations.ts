@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from '../useActor';
 import { ProductCategory, ExternalBlob } from '@/backend';
 import { toast } from 'sonner';
+import { getAdminToken } from '../admin/useAdminSession';
 
 interface CreateProductParams {
   name: string;
@@ -25,11 +26,22 @@ export function useCreateProduct() {
   return useMutation({
     mutationFn: async (params: CreateProductParams) => {
       if (!actor) throw new Error('Actor not available');
+      
+      const token = getAdminToken();
+      if (!token) {
+        throw new Error('Admin login is required');
+      }
+
       try {
-        return await actor.createProduct(params.name, params.price, params.category, params.image);
+        return await actor.createProduct(token, {
+          name: params.name,
+          price: params.price,
+          category: params.category,
+          image: params.image,
+        });
       } catch (error) {
         if (error instanceof Error && error.message.includes('Unauthorized')) {
-          throw new Error('You must be logged in as admin to create products');
+          throw new Error('Admin login is required');
         }
         throw error;
       }
@@ -51,11 +63,22 @@ export function useUpdateProduct() {
   return useMutation({
     mutationFn: async (params: UpdateProductParams) => {
       if (!actor) throw new Error('Actor not available');
+      
+      const token = getAdminToken();
+      if (!token) {
+        throw new Error('Admin login is required');
+      }
+
       try {
-        return await actor.updateProduct(params.id, params.name, params.price, params.category, params.image);
+        return await actor.updateProduct(token, params.id, {
+          name: params.name,
+          price: params.price,
+          category: params.category,
+          image: params.image,
+        });
       } catch (error) {
         if (error instanceof Error && error.message.includes('Unauthorized')) {
-          throw new Error('You must be logged in as admin to update products');
+          throw new Error('Admin login is required');
         }
         throw error;
       }
@@ -77,11 +100,17 @@ export function useDeleteProduct() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!actor) throw new Error('Actor not available');
+      
+      const token = getAdminToken();
+      if (!token) {
+        throw new Error('Admin login is required');
+      }
+
       try {
-        return await actor.deleteProduct(id);
+        return await actor.deleteProduct(token, id);
       } catch (error) {
         if (error instanceof Error && error.message.includes('Unauthorized')) {
-          throw new Error('You must be logged in as admin to delete products');
+          throw new Error('Admin login is required');
         }
         throw error;
       }

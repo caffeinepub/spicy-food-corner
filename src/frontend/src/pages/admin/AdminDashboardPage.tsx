@@ -21,6 +21,14 @@ export default function AdminDashboardPage() {
     });
   };
 
+  const openAddDialog = () => {
+    setIsAddDialogOpen(true);
+  };
+
+  const closeAddDialog = () => {
+    setIsAddDialogOpen(false);
+  };
+
   return (
     <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
@@ -34,7 +42,7 @@ export default function AdminDashboardPage() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button onClick={() => setIsAddDialogOpen(true)} size="lg">
+            <Button onClick={openAddDialog} size="lg">
               <Plus className="mr-2 h-5 w-5" />
               Add Product
             </Button>
@@ -57,15 +65,26 @@ export default function AdminDashboardPage() {
         )}
 
         {!isLoading && !error && (
-          <ProductTable products={products || []} />
+          <ProductTable products={products || []} onAddProduct={openAddDialog} />
         )}
 
         <ProductEditorDialog
           open={isAddDialogOpen}
-          onOpenChange={setIsAddDialogOpen}
+          onOpenChange={closeAddDialog}
           mode="create"
         />
       </div>
+
+      {/* Mobile Floating Add Button */}
+      {!isLoading && !error && products && products.length > 0 && (
+        <Button
+          onClick={openAddDialog}
+          size="lg"
+          className="fixed bottom-6 right-6 md:hidden rounded-full shadow-lg h-14 w-14 p-0"
+        >
+          <Plus className="h-6 w-6" />
+        </Button>
+      )}
     </div>
   );
 }

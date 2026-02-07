@@ -1,8 +1,8 @@
-import { Product } from '@/backend';
+import { ProductSummary } from '@/backend';
 import ProductCard from './ProductCard';
 
 interface ProductGridProps {
-  products: Product[];
+  products: ProductSummary[];
 }
 
 export default function ProductGrid({ products }: ProductGridProps) {

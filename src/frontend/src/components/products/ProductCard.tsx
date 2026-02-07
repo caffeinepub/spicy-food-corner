@@ -1,23 +1,37 @@
-import { Product, ProductCategory } from '@/backend';
+import { ProductSummary, ProductCategory } from '@/backend';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { buildWhatsAppOrderUrl } from '@/utils/whatsapp';
 import { SiWhatsapp } from 'react-icons/si';
+import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
+import { useCartContext } from '@/components/cart/CartProvider';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductSummary;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const imageUrl = product.image.getDirectURL();
   const priceInRupees = Number(product.price);
+  const { addItem } = useCartContext();
 
   const handleOrderClick = () => {
     const url = buildWhatsAppOrderUrl(product.name, priceInRupees);
     window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: priceInRupees,
+      imageUrl: imageUrl,
+    });
+    toast.success(`${product.name} added to cart!`);
   };
 
   return (
@@ -44,7 +58,16 @@ export default function ProductCard({ product }: ProductCardProps) {
           ₹{priceInRupees}
         </p>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-4 pt-0 flex flex-col gap-2">
+        <Button
+          onClick={handleAddToCart}
+          className="w-full"
+          size="lg"
+          variant="default"
+        >
+          <ShoppingCart className="mr-2 h-5 w-5" />
+          Add to Cart
+        </Button>
         <Button
           onClick={handleOrderClick}
           className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"

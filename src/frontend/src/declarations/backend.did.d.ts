@@ -22,6 +22,19 @@ export interface Product {
 }
 export type ProductCategory = { 'food' : null } |
   { 'grocery' : null };
+export interface ProductInput {
+  'name' : string,
+  'category' : ProductCategory,
+  'image' : ExternalBlob,
+  'price' : bigint,
+}
+export interface ProductSummary {
+  'id' : string,
+  'name' : string,
+  'category' : ProductCategory,
+  'image' : ExternalBlob,
+  'price' : bigint,
+}
 export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
@@ -55,25 +68,21 @@ export interface _SERVICE {
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
-  'createProduct' : ActorMethod<
-    [string, bigint, ProductCategory, ExternalBlob],
-    Product
-  >,
-  'deleteProduct' : ActorMethod<[string], undefined>,
-  'getAllProducts' : ActorMethod<[], Array<Product>>,
+  'createProduct' : ActorMethod<[string, ProductInput], ProductSummary>,
+  'deleteProduct' : ActorMethod<[string, string], undefined>,
+  'getAllProducts' : ActorMethod<[], Array<ProductSummary>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getFoodProducts' : ActorMethod<[], Array<Product>>,
-  'getGroceryProducts' : ActorMethod<[], Array<Product>>,
+  'getFoodProducts' : ActorMethod<[], Array<ProductSummary>>,
+  'getGroceryProducts' : ActorMethod<[], Array<ProductSummary>>,
   'getProduct' : ActorMethod<[string], Product>,
   'getProductImage' : ActorMethod<[string], ExternalBlob>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isAdminSession' : ActorMethod<[string], boolean>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'loginAdmin' : ActorMethod<[string, string], string>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
-  'updateProduct' : ActorMethod<
-    [string, string, bigint, ProductCategory, ExternalBlob],
-    Product
-  >,
+  'updateProduct' : ActorMethod<[string, string, ProductInput], ProductSummary>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

@@ -29,6 +29,20 @@ export const ProductCategory = IDL.Variant({
   'grocery' : IDL.Null,
 });
 export const ExternalBlob = IDL.Vec(IDL.Nat8);
+export const ProductInput = IDL.Record({
+  'name' : IDL.Text,
+  'category' : ProductCategory,
+  'image' : ExternalBlob,
+  'price' : IDL.Nat,
+});
+export const ProductSummary = IDL.Record({
+  'id' : IDL.Text,
+  'name' : IDL.Text,
+  'category' : ProductCategory,
+  'image' : ExternalBlob,
+  'price' : IDL.Nat,
+});
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 export const Product = IDL.Record({
   'id' : IDL.Text,
   'name' : IDL.Text,
@@ -38,7 +52,6 @@ export const Product = IDL.Record({
   'image' : ExternalBlob,
   'price' : IDL.Nat,
 });
-export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -69,17 +82,13 @@ export const idlService = IDL.Service({
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'createProduct' : IDL.Func(
-      [IDL.Text, IDL.Nat, ProductCategory, ExternalBlob],
-      [Product],
-      [],
-    ),
-  'deleteProduct' : IDL.Func([IDL.Text], [], []),
-  'getAllProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
+  'createProduct' : IDL.Func([IDL.Text, ProductInput], [ProductSummary], []),
+  'deleteProduct' : IDL.Func([IDL.Text, IDL.Text], [], []),
+  'getAllProducts' : IDL.Func([], [IDL.Vec(ProductSummary)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getFoodProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
-  'getGroceryProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
+  'getFoodProducts' : IDL.Func([], [IDL.Vec(ProductSummary)], ['query']),
+  'getGroceryProducts' : IDL.Func([], [IDL.Vec(ProductSummary)], ['query']),
   'getProduct' : IDL.Func([IDL.Text], [Product], ['query']),
   'getProductImage' : IDL.Func([IDL.Text], [ExternalBlob], ['query']),
   'getUserProfile' : IDL.Func(
@@ -87,11 +96,13 @@ export const idlService = IDL.Service({
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'isAdminSession' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'loginAdmin' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'updateProduct' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Nat, ProductCategory, ExternalBlob],
-      [Product],
+      [IDL.Text, IDL.Text, ProductInput],
+      [ProductSummary],
       [],
     ),
 });
@@ -120,6 +131,20 @@ export const idlFactory = ({ IDL }) => {
     'grocery' : IDL.Null,
   });
   const ExternalBlob = IDL.Vec(IDL.Nat8);
+  const ProductInput = IDL.Record({
+    'name' : IDL.Text,
+    'category' : ProductCategory,
+    'image' : ExternalBlob,
+    'price' : IDL.Nat,
+  });
+  const ProductSummary = IDL.Record({
+    'id' : IDL.Text,
+    'name' : IDL.Text,
+    'category' : ProductCategory,
+    'image' : ExternalBlob,
+    'price' : IDL.Nat,
+  });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const Product = IDL.Record({
     'id' : IDL.Text,
     'name' : IDL.Text,
@@ -129,7 +154,6 @@ export const idlFactory = ({ IDL }) => {
     'image' : ExternalBlob,
     'price' : IDL.Nat,
   });
-  const UserProfile = IDL.Record({ 'name' : IDL.Text });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -160,17 +184,13 @@ export const idlFactory = ({ IDL }) => {
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'createProduct' : IDL.Func(
-        [IDL.Text, IDL.Nat, ProductCategory, ExternalBlob],
-        [Product],
-        [],
-      ),
-    'deleteProduct' : IDL.Func([IDL.Text], [], []),
-    'getAllProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
+    'createProduct' : IDL.Func([IDL.Text, ProductInput], [ProductSummary], []),
+    'deleteProduct' : IDL.Func([IDL.Text, IDL.Text], [], []),
+    'getAllProducts' : IDL.Func([], [IDL.Vec(ProductSummary)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getFoodProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
-    'getGroceryProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
+    'getFoodProducts' : IDL.Func([], [IDL.Vec(ProductSummary)], ['query']),
+    'getGroceryProducts' : IDL.Func([], [IDL.Vec(ProductSummary)], ['query']),
     'getProduct' : IDL.Func([IDL.Text], [Product], ['query']),
     'getProductImage' : IDL.Func([IDL.Text], [ExternalBlob], ['query']),
     'getUserProfile' : IDL.Func(
@@ -178,11 +198,13 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'isAdminSession' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'loginAdmin' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'updateProduct' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Nat, ProductCategory, ExternalBlob],
-        [Product],
+        [IDL.Text, IDL.Text, ProductInput],
+        [ProductSummary],
         [],
       ),
   });
