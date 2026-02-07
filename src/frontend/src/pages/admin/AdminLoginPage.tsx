@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useAdminLogin } from '@/hooks/admin/useAdminSession';
 import { Button } from '@/components/ui/button';
@@ -13,10 +13,20 @@ export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { mutate: login, isPending, error } = useAdminLogin();
+  const { mutate: login, isPending, error, reset } = useAdminLogin();
+
+  // Clear error when user changes input
+  useEffect(() => {
+    if (error) {
+      reset();
+    }
+  }, [username, password]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Clear any previous error before attempting login
+    reset();
     
     login(
       { username, password },

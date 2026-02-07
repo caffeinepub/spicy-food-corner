@@ -1,47 +1,66 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Admin Dashboard: Persistent and Discoverable Add Product Actions",
+  "title": "Add English About Us page and homepage RKS contact block",
   "requirements": [
     {
-      "id": "REQ-28",
-      "summary": "Ensure the Admin Dashboard always provides an Add Product action after creating products, allowing multiple consecutive creations without refresh.",
+      "id": "REQ-43",
+      "summary": "Create a public English About Us page describing DailyKart as an RKS Brand local ordering platform for Vrindavan with Terms & Policy and Help Desk/Contact details.",
       "acceptanceCriteria": [
-        "After successfully creating a product, the Admin Dashboard still shows an \"Add Product\" action that can be used to open the create-product dialog again.",
-        "An admin can create at least 3 different products in a row in a single session without needing to refresh the page.",
-        "No user-facing text is introduced in a non-English language (keep UI text in English)."
+        "A new route is available at \"/about\" and renders without requiring login.",
+        "All user-facing text on the About Us page is in English.",
+        "The About Us page includes these sections (with clear headings): Overview (DailyKart purpose), Service Area (Vrindavan + nearby areas), Terms & Policy (Order Policy, Payment Policy, Delivery Policy, Cancellation Policy, Responsibility), and Help Desk / Contact Us.",
+        "The About Us page explicitly states that DailyKart is not the direct seller and that orders are forwarded to nearby shopkeepers; payments are made directly to the shopkeeper; delivery is handled by the shopkeeper.",
+        "The Help Desk / Contact section includes: Mobile Number 9897743469, Owner Name Ram Kumar Saini, Brand Name RKS Brand, Address \"Vrindavan, Rukmani Vihar, Sector-2\"."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "operation": "modify",
-          "description": "Refactor the create-product dialog open/close control into a stable handler (e.g., openCreate/closeCreate) and pass it down to child UI so Add Product can be triggered reliably after each successful create. Keep the existing top \"Add Product\" button always rendered. Use existing shadcn-ui Button for the action. Verify the component's usage instructions before implementing."
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "create",
+          "description": "Add a new public About Us page with clear English headings and content: Overview, Service Area (Vrindavan + nearby areas), Terms & Policy subsections (Order, Payment, Delivery, Cancellation, Responsibility), and Help Desk / Contact Us including the required RKS Brand/owner/mobile/address details. Ensure the page explicitly states DailyKart is not the direct seller and orders are forwarded to nearby shopkeepers, with payment and delivery handled by the shopkeeper."
         },
         {
-          "path": "frontend/src/components/admin/ProductEditorDialog.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Harden the create flow so, after a successful creation, the dialog closes and the form state is reset/ready for the next creation when reopened (avoid any stale form values or stuck pending state). Keep all user-facing text in English. Use existing shadcn-ui Dialog and form controls; do not modify UI component source. Verify the component's usage instructions before implementing."
+          "description": "Register the new \"/about\" route in the TanStack Router route tree and wire it to the newly created AboutPage component (public, no auth guard)."
         }
       ]
     },
     {
-      "id": "REQ-29",
-      "summary": "Add additional, in-context Add Product entry points for long product lists and improve the empty state so Add Product is discoverable without removing the existing top button.",
+      "id": "REQ-44",
+      "summary": "Add an \"About Us\" navigation link in the existing header for both desktop and mobile menus without altering existing nav actions.",
       "acceptanceCriteria": [
-        "When the product list is non-empty and the user scrolls down on mobile-sized screens, there remains an obvious way to add a new product without scrolling back to the very top.",
-        "When there are zero products, the empty-state area includes a clickable \"Add Product\" action that opens the create-product dialog.",
-        "The create-product dialog opens reliably from every \"Add Product\" entry point and closes on successful creation, ready to create another product."
+        "The site header shows an \"About Us\" link alongside existing navigation items.",
+        "The \"About Us\" link works on both desktop and mobile menus and navigates to \"/about\".",
+        "Adding this link does not remove or change existing navigation actions (Home, All Products, Cart, Admin)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/admin/ProductTable.tsx",
+          "path": "frontend/src/components/layout/SiteHeader.tsx",
           "operation": "modify",
-          "description": "Add a new prop (e.g., onAddProduct) to open the create-product dialog from within the product management area. Implement: (1) an empty-state \"Add Product\" button, and (2) an in-context add entry point near the list (e.g., a small toolbar button above the table/cards). Use existing shadcn-ui Button and existing layout primitives; keep all text in English. Verify the component's usage instructions before implementing."
+          "description": "Add a new nav item labeled \"About Us\" pointing to \"/about\" and ensure it appears and works in both desktop navigation and the mobile menu, while keeping existing navigation items/actions (Home, All Products, Cart, Admin) unchanged."
+        }
+      ]
+    },
+    {
+      "id": "REQ-45",
+      "summary": "Add a mobile-friendly bottom section on the Home page showing RKS brand name, address, and contact number only on \"/\".",
+      "acceptanceCriteria": [
+        "On the Home page, a clearly visible bottom section appears below the main content and before the global footer ends.",
+        "The section displays these fields in English with the exact values: Brand Name: RKS; Address: Vrindavan, Rukmani Vihar, Sector-2; Contact Number: 9897743469.",
+        "The section is not shown on non-home routes (e.g., /products, /cart, /checkout, /admin/*, /about).",
+        "This section follows the existing site styling system (Tailwind theme tokens) and is mobile-friendly (no horizontal overflow, readable on small screens)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/branding/HomeRksContactBlock.tsx",
+          "operation": "create",
+          "description": "Create a reusable Home-only bottom block component that renders exactly three English items with the required values: Brand Name: RKS; Address: Vrindavan, Rukmani Vihar, Sector-2; Contact Number: 9897743469. Style using existing Tailwind theme tokens and ensure mobile-friendly layout (no horizontal overflow)."
         },
         {
-          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "path": "frontend/src/pages/CustomerPanelPage.tsx",
           "operation": "modify",
-          "description": "Wire the new ProductTable onAddProduct prop to the same create dialog opener used by the top action button. Add a mobile-friendly persistent/sticky Add Product action (e.g., a fixed-position button on small screens) while retaining the existing top action button. Use existing shadcn-ui Button (and lucide Plus icon already in use). Verify the component's usage instructions before implementing."
+          "description": "Wire the new HomeRksContactBlock into the Home page (\"/\") below the existing main content so it appears before the global SiteFooter. Ensure it is only included on this page so it does not render on other routes."
         }
       ]
     }

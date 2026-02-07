@@ -2,9 +2,11 @@ import { useState } from 'react';
 import BrandingHero from '@/components/branding/BrandingHero';
 import CategorySwitcher from '@/components/products/CategorySwitcher';
 import ProductGrid from '@/components/products/ProductGrid';
+import HomeRksContactBlock from '@/components/branding/HomeRksContactBlock';
 import { useProducts } from '@/hooks/products/useProducts';
 import { ProductCategory } from '@/backend';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function CustomerPanelPage() {
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
@@ -40,9 +42,14 @@ export default function CustomerPanelPage() {
           </div>
         )}
 
-        {error && (
-          <div className="text-center py-16">
-            <p className="text-destructive">Failed to load products. Please try again.</p>
+        {error && !isLoading && (
+          <div className="flex justify-center items-center py-16">
+            <Alert variant="destructive" className="max-w-md">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Failed to load products. Please refresh the page or try again later.
+              </AlertDescription>
+            </Alert>
           </div>
         )}
 
@@ -58,6 +65,8 @@ export default function CustomerPanelPage() {
           <ProductGrid products={filteredProducts} />
         )}
       </section>
+
+      <HomeRksContactBlock />
     </div>
   );
 }

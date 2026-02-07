@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Ensure the Admin Dashboard always provides a reliable, discoverable “Add Product” action so admins can create multiple products in a row without refreshing, including on long lists and small screens.
+**Goal:** Add a new public English “About Us” page for DailyKart and show an RKS contact block at the bottom of the Home page.
 
 **Planned changes:**
-- Fix the Admin Dashboard state/UI so the “Add Product” action does not disappear after the first product is created and can reopen the create-product dialog immediately after a successful creation.
-- Add an additional, in-context “Add Product” entry point near the product list (including an empty-state action when there are zero products) while keeping the existing top action button.
-- Improve small-screen usability by ensuring there is a persistent/discoverable way to add a product when the list is long and the user has scrolled down.
+- Create a new public route at `/about` with an English “About Us” page describing DailyKart as a local online ordering platform (not a direct seller), operating under RKS Brand, serving Vrindavan (and nearby areas), and including Terms & Policy sections plus a Help Desk / Contact Us section.
+- Add an “About Us” link to the existing site header navigation (desktop and mobile) without changing other navigation items.
+- Add a Home-page-only bottom section (on `/` only) displaying: Brand Name (RKS), Address (Vrindavan, Rukmani Vihar, Sector-2), and Contact Number (9897743469), styled consistently and mobile-friendly.
 
-**User-visible outcome:** Admins can add 3+ products consecutively in one session, and can always find an “Add Product” action (including from the empty state and while scrolled on mobile) that reliably opens and closes the create-product dialog for repeated use.
+**User-visible outcome:** Users can open an “About Us” page from the header to read DailyKart details, policies, and contact info, and they will also see RKS brand/address/contact details in a dedicated bottom block on the Home page.

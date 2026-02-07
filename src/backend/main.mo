@@ -12,11 +12,9 @@ import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 import Nat "mo:core/Nat";
 import Int "mo:core/Int";
-
 import Char "mo:core/Char";
 import Blob "mo:core/Blob";
 import Random "mo:core/Random";
-
 
 actor {
   // Blob storage for images
@@ -216,7 +214,7 @@ actor {
   func isValidAdminCredentials(username : Text, password : Text) : Bool {
     let trimmedUsername = username.trim(#char(' '));
     let trimmedPassword = password.trim(#char(' '));
-    trimmedUsername == "foodram corner" and trimmedPassword == "ram4792sa";
+    trimmedUsername == "9897743469" and trimmedPassword == "rk3469sa";
   };
 
   public shared ({ caller }) func loginAdmin(username : Text, password : Text) : async Text {

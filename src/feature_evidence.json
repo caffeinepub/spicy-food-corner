@@ -2,11 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-fix-the-admin-dashboard-ui-so-the-admin-can-always-access-an-add-product-action-after-creating-the-first-product-i-e-the-add-product-button-must-not-disappear-allowing-multiple-products-to-be-created-in-succession",
-      "featureTitle": "Fix the Admin Dashboard UI so the admin can always access an \"Add Product\" action after creating the first product (i.e., the Add Product button must not disappear), allowing multiple products to be created in succession.",
+      "featureId": "feature-create-a-new-public-about-us-page-in-english-that-describes-dailykart-as-a-local-online-ordering-platform-not-a-direct-seller-operating-under-rks-brand-serving-vrindavan-nearby-areas-and-includes-the-provided-terms-policy-sections-plus-a-help-desk-contact-section",
+      "featureTitle": "Create a new public \"About Us\" page in English that describes DailyKart as a local online ordering platform (not a direct seller), operating under RKS Brand, serving Vrindavan (nearby areas), and includes the provided Terms & Policy sections plus a Help Desk / Contact section.",
       "files": [
-        "frontend/src/components/admin/ProductEditorDialog.tsx",
-        "frontend/src/pages/admin/AdminDashboardPage.tsx"
+        "frontend/src/App.tsx",
+        "frontend/src/pages/AboutPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -18,16 +18,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-28"
+        "REQ-43"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-improve-the-admin-dashboard-product-management-screen-so-the-add-product-action-is-discoverable-even-when-the-product-list-is-long-e-g-provide-an-additional-in-context-add-product-entry-point-near-the-product-list-and-or-a-persistent-sticky-action-on-small-screens-without-removing-the-existing-top-action-button",
-      "featureTitle": "Improve the Admin Dashboard product management screen so the \"Add Product\" action is discoverable even when the product list is long (e.g., provide an additional in-context Add Product entry point near the product list and/or a persistent/sticky action on small screens), without removing the existing top action button.",
+      "featureId": "feature-add-navigation-access-to-the-new-about-us-page-from-the-existing-site-header-navigation-desktop-and-mobile-using-the-label-about-us",
+      "featureTitle": "Add navigation access to the new About Us page from the existing site header navigation (desktop and mobile) using the label \"About Us\".",
       "files": [
-        "frontend/src/components/admin/ProductTable.tsx",
-        "frontend/src/pages/admin/AdminDashboardPage.tsx"
+        "frontend/src/components/layout/SiteHeader.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -39,7 +38,28 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-29"
+        "REQ-44"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-bottom-section-on-the-home-page-that-displays-exactly-these-three-items-in-english-brand-name-rks-address-vrindavan-rukmani-vihar-sector-2-and-contact-number-9897743469",
+      "featureTitle": "Add a bottom section on the Home page (\"/\") that displays exactly these three items in English: Brand Name (RKS), Address (Vrindavan, Rukmani Vihar, Sector-2), and Contact Number (9897743469).",
+      "files": [
+        "frontend/src/components/branding/HomeRksContactBlock.tsx",
+        "frontend/src/pages/CustomerPanelPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-45"
       ],
       "confidence": "high"
     }

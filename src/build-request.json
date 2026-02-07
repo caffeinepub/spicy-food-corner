@@ -1,53 +1,81 @@
 {
   "kind": "build_request",
-  "title": "Fix Admin Panel: Add Product button disappears after first product",
-  "priority": "high",
+  "title": "Add English About Us page and homepage bottom RKS contact block",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-28",
-      "text": "Fix the Admin Dashboard UI so the admin can always access an \"Add Product\" action after creating the first product (i.e., the Add Product button must not disappear), allowing multiple products to be created in succession.",
+      "id": "REQ-43",
+      "text": "Create a new public \"About Us\" page in English that describes DailyKart as a local online ordering platform (not a direct seller), operating under RKS Brand, serving Vrindavan (nearby areas), and includes the provided Terms & Policy sections plus a Help Desk / Contact section.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4",
+          "msg-8",
+          "msg-10"
         ],
         "quotes": [
-          "mne ek product add kiya tha uske bad add ka button nahi shoew ho raha hai    nahi dekh raha hai button   yh problem admin pannel mai hai"
+          "ABOUT US SAI NEW PAGE  ADD  AND  BRAND   UR HOME PAGE NICHE   ADRESS UR BRAND NAME  RKS   UR CONTACT NO  BS  3 CHIZ add krne hai ur  text english  mai add krna hai not easy ok",
+          "MUJE SITE DAILY CART ek local online ordering platform hai...",
+          "📜 TERMS & POLICY (Basic) ... 🆘 HELP DESK / CONTACT US ..."
         ]
       },
       "acceptanceCriteria": [
-        "After successfully creating a product, the Admin Dashboard still shows an \"Add Product\" action that can be used to open the create-product dialog again.",
-        "An admin can create at least 3 different products in a row in a single session without needing to refresh the page.",
-        "No user-facing text is introduced in a non-English language (keep UI text in English)."
+        "A new route is available at \"/about\" and renders without requiring login.",
+        "All user-facing text on the About Us page is in English.",
+        "The About Us page includes these sections (with clear headings): Overview (DailyKart purpose), Service Area (Vrindavan + nearby areas), Terms & Policy (Order Policy, Payment Policy, Delivery Policy, Cancellation Policy, Responsibility), and Help Desk / Contact Us.",
+        "The About Us page explicitly states that DailyKart is not the direct seller and that orders are forwarded to nearby shopkeepers; payments are made directly to the shopkeeper; delivery is handled by the shopkeeper.",
+        "The Help Desk / Contact section includes: Mobile Number 9897743469, Owner Name Ram Kumar Saini, Brand Name RKS Brand, Address \"Vrindavan, Rukmani Vihar, Sector-2\"."
       ]
     },
     {
-      "id": "REQ-29",
-      "text": "Improve the Admin Dashboard product management screen so the \"Add Product\" action is discoverable even when the product list is long (e.g., provide an additional in-context Add Product entry point near the product list and/or a persistent/sticky action on small screens), without removing the existing top action button.",
+      "id": "REQ-44",
+      "text": "Add navigation access to the new About Us page from the existing site header navigation (desktop and mobile) using the label \"About Us\".",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-10"
         ],
         "quotes": [
-          "add ka button nahi shoew ho raha hai"
+          "yes okk"
         ]
       },
       "acceptanceCriteria": [
-        "When the product list is non-empty and the user scrolls down on mobile-sized screens, there remains an obvious way to add a new product without scrolling back to the very top.",
-        "When there are zero products, the empty-state area includes a clickable \"Add Product\" action that opens the create-product dialog.",
-        "The create-product dialog opens reliably from every \"Add Product\" entry point and closes on successful creation, ready to create another product."
+        "The site header shows an \"About Us\" link alongside existing navigation items.",
+        "The \"About Us\" link works on both desktop and mobile menus and navigates to \"/about\".",
+        "Adding this link does not remove or change existing navigation actions (Home, All Products, Cart, Admin)."
+      ]
+    },
+    {
+      "id": "REQ-45",
+      "text": "Add a bottom section on the Home page (\"/\") that displays exactly these three items in English: Brand Name (RKS), Address (Vrindavan, Rukmani Vihar, Sector-2), and Contact Number (9897743469).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-8",
+          "msg-10"
+        ],
+        "quotes": [
+          "BRAND   UR HOME PAGE NICHE   ADRESS UR BRAND NAME  RKS   UR CONTACT NO  BS  3 CHIZ add krne hai",
+          "yes okk"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Home page, a clearly visible bottom section appears below the main content and before the global footer ends.",
+        "The section displays these fields in English with the exact values: Brand Name: RKS; Address: Vrindavan, Rukmani Vihar, Sector-2; Contact Number: 9897743469.",
+        "The section is not shown on non-home routes (e.g., /products, /cart, /checkout, /admin/*, /about).",
+        "This section follows the existing site styling system (Tailwind theme tokens) and is mobile-friendly (no horizontal overflow, readable on small screens)."
       ]
     }
   ],
   "constraints": [
-    "Frontend immutable paths must not be modified: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui (compose existing UI components instead).",
-    "Keep all user-facing text in English."
+    "Use English for all new user-facing text added by these changes.",
+    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files under frontend/src/components/ui (compose them instead).",
+    "Keep backend architecture unchanged (single Motoko actor); no backend changes are required for this request."
   ],
   "nonGoals": [
-    "Changing backend product CRUD behavior or data model.",
-    "Adding new categories beyond the fixed Food and Grocery categories.",
-    "Adding new authentication methods or changing admin credentials."
+    "Do not change existing WhatsApp ordering flows (single-product or cart checkout).",
+    "Do not change admin authentication, admin routes, or product management behavior as part of this request.",
+    "Do not introduce new categories, product fields, or backend storage changes."
   ],
   "imageRequirements": {
     "required": [],

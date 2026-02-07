@@ -6,7 +6,7 @@ export default function SiteFooter() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm text-muted-foreground text-center md:text-left">
-            <p className="font-semibold text-foreground mb-1">Spicy Food Corner</p>
+            <p className="font-semibold text-foreground mb-1">DailyKart</p>
             <p>Your favorite food & grocery destination</p>
           </div>
           <div className="text-sm text-muted-foreground text-center md:text-right">

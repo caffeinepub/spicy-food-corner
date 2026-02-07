@@ -14,6 +14,7 @@ export default function SiteHeader() {
   const navItems = [
     { label: 'Home', path: '/' },
     { label: 'All Products', path: '/products' },
+    { label: 'About Us', path: '/about' },
   ];
 
   const handleCartClick = () => {
@@ -26,11 +27,16 @@ export default function SiteHeader() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-chart-1 to-chart-4 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">🌶️</span>
-            </div>
+            <img
+              src="/assets/generated/dailykart-logo.dim_512x512.png"
+              alt="DailyKart"
+              className="h-10 w-10 rounded-lg object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
             <span className="font-bold text-xl text-foreground hidden sm:inline-block">
-              Spicy Food Corner
+              DailyKart
             </span>
           </Link>
 

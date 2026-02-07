@@ -1,24 +1,27 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 15,
-  "summary": "Spicy Food Corner: a simple mobile-friendly food & grocery website opened via QR/link where customers browse products and place orders via WhatsApp—either one-click per product or via a cart + order form (name, mobile, address) that sends full multi-item details to WhatsApp; owner manages products via a secure admin panel with custom username/password login. Categories are fixed to Food and Grocery, and WhatsApp number is 9897743469.",
+  "projectStateVersion": 25,
+  "summary": "Rename the site from Spicy Food Corner to DailyKart and add a newly generated logo applied across the UI; keep existing WhatsApp-based ordering and admin/product management features unchanged, and add an English About Us page plus a home-page bottom section showing RKS brand/contact details.",
   "architectural_notes": [
     "Target platform mentioned: Internet Computer (Motoko backend + React frontend).",
     "Admin auth decision: custom username/password (not Internet Identity).",
     "Fixed categories: Food and Grocery only.",
     "WhatsApp ordering target number: 9897743469.",
-    "Admin Panel credentials chosen by user: username \"foodram corner\" (with space), password \"ram4792sa\" (to be set as the admin login).",
     "User requests using an alternative admin login method/flow because current username/password login continues to fail (\"Invalid password\").",
     "Customers can place multi-item orders via an Add-to-Cart + quantity selection flow, then 'Proceed to Order' opens an order form that sends the full order to WhatsApp.",
     "Order form fields: Customer Name, Mobile Number, Delivery Address; product details auto-filled from cart and sent to WhatsApp.",
-    "Both options must remain available: direct per-product WhatsApp order and order-form/cart-based WhatsApp ordering."
+    "Both options must remain available: direct per-product WhatsApp order and order-form/cart-based WhatsApp ordering.",
+    "Brand/name change requested: rename site/app to \"DailyKart\" and apply a generated logo.",
+    "Admin Panel credentials updated by user: username \"9897743469\", password \"rk3469sa\" (replace previous \"foodram corner\" / \"ram4792sa\")."
   ],
   "known_issues": [
-    "Admin credentials were shared in chat; rotate/change password after setup to avoid exposure.",
     "Admin panel login is failing and shows \"invalid password\" even when using the provided credentials (username \"foodram corner\", password \"ram4792sa\").",
-    "Admin Panel bug: after adding one product, the “Add Product/Add New Product” button disappears, preventing adding a second product."
+    "Admin Panel bug: after adding one product, the “Add Product/Add New Product” button disappears, preventing adding a second product.",
+    "Admin Panel login fails immediately with \"A system error occurred. Please try again later.\"",
+    "Customer Panel does not load/display any products (no products visible).",
+    "New admin credentials were shared in chat; rotate/change password after setup to avoid exposure."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-public-customer-panel-page-that-loads-and-displays-all-products-without-requiring-login-display-product-image-name-price-and-category-and-support-browsing-by-the-two-fixed-categories-food-grocery",
@@ -195,6 +198,126 @@
         "REQ-29"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-rename-the-app-site-brand-name-to-dailykart-across-the-frontend-ui-replacing-all-visible-occurrences-of-the-old-name-e-g-spicy-food-corner-including-the-browser-tab-title-and-any-branding-headings-text",
+      "title": "Rename the app/site brand name to \"DailyKart\" across the frontend UI, replacing all visible occurrences of the old name (e.g., \"Spicy Food Corner\") including the browser tab title and any branding headings/text.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-new-generated-branding-images-for-dailykart-as-static-assets-under-frontend-public-assets-generated-and-update-the-ui-to-use-them-logo-in-the-hero-and-any-other-existing-logo-placements",
+      "title": "Add new generated branding images for \"DailyKart\" as static assets under frontend/public/assets/generated, and update the UI to use them (logo in the hero and any other existing logo placements).",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-site-header-branding-block-to-use-the-generated-dailykart-logo-image-instead-of-the-current-emoji-based-icon-while-keeping-navigation-and-cart-admin-actions-unchanged",
+      "title": "Update the site header branding block to use the generated DailyKart logo image instead of the current emoji-based icon, while keeping navigation and cart/admin actions unchanged.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-admin-panel-login-flow-so-that-entering-the-correct-credentials-username-foodram-corner-including-the-space-password-ram4792sa-does-not-immediately-fail-with-the-generic-message-a-system-error-occurred-please-try-again-later-and-instead-either-a-successfully-logs-in-and-navigates-to-admin-dashboard-or-b-shows-an-accurate-english-error-message-that-reflects-the-real-failure-reason-invalid-credentials-vs-connectivity-system-failure",
+      "title": "Fix the Admin Panel login flow so that entering the correct credentials (username \"foodram corner\" including the space, password \"ram4792sa\") does not immediately fail with the generic message \"A system error occurred. Please try again later.\" and instead either (a) successfully logs in and navigates to /admin/dashboard or (b) shows an accurate English error message that reflects the real failure reason (invalid credentials vs connectivity/system failure).",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-admin-auth-error-normalization-so-common-internet-computer-agent-errors-including-reject-trap-messages-that-wrap-backend-text-like-invalid-credentials-are-correctly-classified-and-displayed-in-english-instead-of-falling-back-to-the-generic-a-system-error-occurred-please-try-again-later",
+      "title": "Improve admin-auth error normalization so common Internet Computer/agent errors (including reject/trap messages that wrap backend text like \"Invalid credentials\") are correctly classified and displayed in English, instead of falling back to the generic \"A system error occurred. Please try again later.\".",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-product-loading-so-the-customer-panel-does-not-silently-show-no-products-available-when-the-backend-actor-is-unavailable-or-product-fetching-fails-instead-it-must-show-a-clear-english-error-state-when-products-cannot-be-loaded-and-only-show-an-empty-state-message-when-products-were-fetched-successfully-and-the-list-is-genuinely-empty",
+      "title": "Fix product loading so the Customer Panel does not silently show \"No products available\" when the backend/actor is unavailable or product fetching fails; instead, it must show a clear English error state when products cannot be loaded, and only show an empty-state message when products were fetched successfully and the list is genuinely empty.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-same-corrected-product-loading-behavior-to-the-product-listing-page-so-it-does-not-display-empty-category-sections-when-the-product-query-failed-it-must-show-an-english-error-state-on-failures-and-only-show-empty-category-messages-on-successful-fetches-with-no-items",
+      "title": "Apply the same corrected product-loading behavior to the Product Listing page so it does not display empty category sections when the product query failed; it must show an English error state on failures and only show empty-category messages on successful fetches with no items.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-lightweight-diagnostics-console-logging-only-around-actor-availability-and-failed-calls-for-admin-login-and-product-fetching-so-that-future-issues-can-be-debugged-without-changing-user-facing-text",
+      "title": "Add lightweight diagnostics (console logging only) around actor availability and failed calls for admin login and product fetching so that future issues can be debugged without changing user-facing text.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-admin-login-error-handling-so-that-when-login-fails-the-ui-shows-an-accurate-english-error-message-e-g-invalid-credentials-vs-connectivity-system-failure-instead-of-the-generic-message-a-system-error-occurred-please-try-again-later-when-the-backend-ic-agent-error-payload-actually-indicates-a-known-cause",
+      "title": "Fix the Admin Login error handling so that when login fails, the UI shows an accurate English error message (e.g., invalid credentials vs connectivity/system failure) instead of the generic message \"A system error occurred. Please try again later.\" when the backend/IC agent error payload actually indicates a known cause.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-frontend-ic-agent-error-message-extraction-parsing-used-by-admin-login-to-correctly-detect-the-underlying-canister-trap-reject-messages-across-common-wrapper-formats-e-g-reject-message-fields-replica-reject-strings-so-normalization-rules-can-match-on-the-extracted-message-content-reliably",
+      "title": "Extend the frontend IC-agent error message extraction/parsing used by admin login to correctly detect the underlying canister trap/reject messages across common wrapper formats (e.g., reject message fields, replica reject strings), so normalization rules can match on the extracted message content reliably.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-admin-login-flow-continues-to-rethrow-and-display-backend-failures-without-masking-them-as-a-generic-system-error-preserving-the-existing-backend-provided-failure-reason-whenever-possible-while-still-keeping-user-facing-text-in-english",
+      "title": "Ensure the Admin Login flow continues to rethrow and display backend failures without masking them as a generic system error, preserving the existing backend-provided failure reason whenever possible while still keeping user-facing text in English.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-admin-login-ui-continues-to-display-an-accurate-english-error-message-when-the-new-credentials-are-incorrect-invalid-username-or-password-and-continues-to-navigate-to-admin-dashboard-on-successful-login-with-the-new-credentials",
+      "title": "Ensure the Admin Login UI continues to display an accurate English error message when the new credentials are incorrect (\"Invalid username or password\") and continues to navigate to \"/admin/dashboard\" on successful login with the new credentials.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-new-public-about-us-page-in-english-that-describes-dailykart-as-a-local-online-ordering-platform-not-a-direct-seller-operating-under-rks-brand-serving-vrindavan-nearby-areas-and-includes-the-provided-terms-policy-sections-plus-a-help-desk-contact-section",
+      "title": "Create a new public \"About Us\" page in English that describes DailyKart as a local online ordering platform (not a direct seller), operating under RKS Brand, serving Vrindavan (nearby areas), and includes the provided Terms & Policy sections plus a Help Desk / Contact section.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-navigation-access-to-the-new-about-us-page-from-the-existing-site-header-navigation-desktop-and-mobile-using-the-label-about-us",
+      "title": "Add navigation access to the new About Us page from the existing site header navigation (desktop and mobile) using the label \"About Us\".",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-bottom-section-on-the-home-page-that-displays-exactly-these-three-items-in-english-brand-name-rks-address-vrindavan-rukmani-vihar-sector-2-and-contact-number-9897743469",
+      "title": "Add a bottom section on the Home page (\"/\") that displays exactly these three items in English: Brand Name (RKS), Address (Vrindavan, Rukmani Vihar, Sector-2), and Contact Number (9897743469).",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -313,10 +436,48 @@
       "summary": "Fix Admin Panel product management UI so the “Add Product / Add New Product” button remains visible after adding the first product, allowing multiple products to be added (no one-product-only limitation).",
       "reqIds": [],
       "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Rename/retitle the website/app to \"DailyKart\" across the UI (headers, titles, branding text) and update any displayed brand name accordingly.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Generate a new \"DailyKart\" logo and apply it across the site (e.g., header/navbar and relevant pages).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Change the Admin Panel login credentials to username \"9897743469\" and password \"rk3469sa\" (replacing the previous credentials).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Update the backend admin credential validation so that the only accepted Admin Panel login credentials are username \"9897743469\" and password \"rk3469sa\" (replacing the previously accepted credentials).",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Add a new About Us page in English describing DailyKart as a local ordering platform (not a direct seller) under RKS Brand, including basic Terms & Policy (order/payment/delivery/cancellation/responsibility) and service area Vrindavan.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Add a bottom section (footer-style) on the Home Page showing: Brand Name (RKS), Address (Vrindavan, Rukmani Vihar, Sector-2), and Contact Number (9897743469) in English.",
+      "reqIds": [],
+      "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "Spicy Food Corner",
+  "projectName": "DailyKart",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

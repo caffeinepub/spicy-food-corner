@@ -8,6 +8,7 @@ import CustomerPanelPage from './pages/CustomerPanelPage';
 import ProductListingPage from './pages/ProductListingPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
+import AboutPage from './pages/AboutPage';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminRouteGuard from './components/admin/AdminRouteGuard';
@@ -48,6 +49,12 @@ const checkoutRoute = createRoute({
   component: CheckoutPage,
 });
 
+const aboutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about',
+  component: AboutPage,
+});
+
 const adminLoginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admin/login',
@@ -70,6 +77,7 @@ const routeTree = rootRoute.addChildren([
   productsRoute,
   cartRoute,
   checkoutRoute,
+  aboutRoute,
   adminLoginRoute,
   adminDashboardRoute,
 ]);

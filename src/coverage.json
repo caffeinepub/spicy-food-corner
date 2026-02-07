@@ -1,39 +1,50 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T12:04:17.888Z",
+  "generatedAt": "2026-02-07T15:09:28.968Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-28",
-        "summary": "Fix the Admin Dashboard UI so the admin can always access an \"Add Product\" action after creating the first product (i.e., the Add Product button must not disappear), allowing multiple products to be created in succession.",
+        "id": "REQ-43",
+        "summary": "Create a new public \"About Us\" page in English that describes DailyKart as a local online ordering platform (not a direct seller), operating under RKS Brand, serving Vrindavan (nearby areas), and includes the provided Terms & Policy sections plus a Help Desk / Contact section.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "frontend/src/components/admin/ProductEditorDialog.tsx"
+          "frontend/src/pages/AboutPage.tsx",
+          "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/admin/AdminDashboardPage.tsx",
-          "frontend/src/components/admin/ProductEditorDialog.tsx"
+          "frontend/src/pages/AboutPage.tsx",
+          "frontend/src/App.tsx"
         ]
       },
       {
-        "id": "REQ-29",
-        "summary": "Improve the Admin Dashboard product management screen so the \"Add Product\" action is discoverable even when the product list is long (e.g., provide an additional in-context Add Product entry point near the product list and/or a persistent/sticky action on small screens), without removing the existing top action button.",
+        "id": "REQ-44",
+        "summary": "Add navigation access to the new About Us page from the existing site header navigation (desktop and mobile) using the label \"About Us\".",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/admin/ProductTable.tsx",
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
+          "frontend/src/components/layout/SiteHeader.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/admin/ProductTable.tsx",
-          "frontend/src/pages/admin/AdminDashboardPage.tsx"
+          "frontend/src/components/layout/SiteHeader.tsx"
+        ]
+      },
+      {
+        "id": "REQ-45",
+        "summary": "Add a bottom section on the Home page (\"/\") that displays exactly these three items in English: Brand Name (RKS), Address (Vrindavan, Rukmani Vihar, Sector-2), and Contact Number (9897743469).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/branding/HomeRksContactBlock.tsx",
+          "frontend/src/pages/CustomerPanelPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/branding/HomeRksContactBlock.tsx",
+          "frontend/src/pages/CustomerPanelPage.tsx"
         ]
       }
     ]
@@ -43,9 +54,11 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/admin/ProductEditorDialog.tsx",
-    "frontend/src/components/admin/ProductTable.tsx",
-    "frontend/src/pages/admin/AdminDashboardPage.tsx",
+    "frontend/src/App.tsx",
+    "frontend/src/components/branding/HomeRksContactBlock.tsx",
+    "frontend/src/components/layout/SiteHeader.tsx",
+    "frontend/src/pages/AboutPage.tsx",
+    "frontend/src/pages/CustomerPanelPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

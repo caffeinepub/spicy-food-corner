@@ -6,15 +6,15 @@ export default function BrandingHero() {
           <div className="flex-1 text-center md:text-left">
             <div className="inline-flex items-center gap-3 mb-6">
               <img
-                src="/assets/generated/spicy-food-corner-logo.dim_512x512.png"
-                alt="Spicy Food Corner Logo"
+                src="/assets/generated/dailykart-logo.dim_512x512.png"
+                alt="DailyKart"
                 className="h-16 w-16 md:h-20 md:w-20 rounded-xl shadow-lg"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
               />
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
-                Spicy Food Corner
+                DailyKart
               </h1>
             </div>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto md:mx-0 mb-6">
@@ -37,8 +37,8 @@ export default function BrandingHero() {
           </div>
           <div className="flex-1 max-w-lg">
             <img
-              src="/assets/generated/spicy-food-corner-hero.dim_1600x600.png"
-              alt="Spicy Food Corner - Fresh Food and Groceries"
+              src="/assets/generated/dailykart-hero.dim_1600x600.png"
+              alt="DailyKart - Fresh Food and Groceries"
               className="w-full h-auto rounded-2xl shadow-2xl"
               onError={(e) => {
                 e.currentTarget.src = '/assets/placeholder-product.svg';

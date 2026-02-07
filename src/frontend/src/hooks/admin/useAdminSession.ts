@@ -97,24 +97,50 @@ export function useAdminLogin() {
 
   return useMutation({
     mutationFn: async ({ username, password }: LoginParams) => {
+      console.log('[Admin Login] Attempting login', { 
+        actorAvailable: !!actor,
+        usernameLength: username.length,
+        passwordLength: password.length 
+      });
+
       if (!actor) {
         const error = new Error('Actor not available');
+        console.error('[Admin Login] Actor not available');
         throw error;
       }
 
       try {
-        const token = await actor.loginAdmin(username, password);
+        // Trim whitespace while preserving internal spaces
+        const trimmedUsername = username.trim();
+        const trimmedPassword = password.trim();
+        
+        console.log('[Admin Login] Calling backend loginAdmin', {
+          trimmedUsernameLength: trimmedUsername.length,
+          trimmedPasswordLength: trimmedPassword.length
+        });
+
+        const token = await actor.loginAdmin(trimmedUsername, trimmedPassword);
+        
         if (!token || token.trim() === '') {
+          console.error('[Admin Login] Backend returned empty token');
           throw new Error('Invalid credentials');
         }
+        
+        console.log('[Admin Login] Login successful, token received');
         storeToken(token);
         return { success: true, token };
       } catch (error) {
+        console.error('[Admin Login] Login failed', {
+          error,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorType: error instanceof Error ? error.constructor.name : typeof error
+        });
         // Re-throw the original error so it can be normalized by the UI
         throw error;
       }
     },
     onSuccess: () => {
+      console.log('[Admin Login] Invalidating session queries');
       queryClient.invalidateQueries({ queryKey: ['adminSession'] });
     },
   });
